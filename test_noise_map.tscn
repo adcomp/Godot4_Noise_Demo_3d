@@ -1,0 +1,373 @@
+[gd_scene load_steps=19 format=3 uid="uid://bvmhhbni57eds"]
+
+[ext_resource type="Script" path="res://test_noise_map.gd" id="1_yin37"]
+[ext_resource type="Gradient" uid="uid://upu0fncbm0tm" path="res://tile_gradient.tres" id="2_mf8pv"]
+[ext_resource type="Texture2D" uid="uid://efev2pfqsj6" path="res://bt_texture/up_left.png" id="3_3y6yt"]
+[ext_resource type="Texture2D" uid="uid://uiipesr7y7xq" path="res://bt_texture/rect.png" id="3_xo5b6"]
+[ext_resource type="Texture2D" uid="uid://bfgcjk0ho1pdn" path="res://bt_texture/up.png" id="4_l8exa"]
+[ext_resource type="Texture2D" uid="uid://ckjw0dudpwyd8" path="res://bt_texture/up_right.png" id="5_w7eyl"]
+[ext_resource type="Texture2D" uid="uid://dnw3dhyn1hvbp" path="res://bt_texture/left.png" id="6_mt4fl"]
+[ext_resource type="Texture2D" uid="uid://bkmi805a7psws" path="res://bt_texture/right.png" id="7_jheoh"]
+[ext_resource type="Texture2D" uid="uid://b1xgbmsi6ewb0" path="res://bt_texture/down_left.png" id="8_7ach2"]
+[ext_resource type="Texture2D" uid="uid://dcbtgyhkpemax" path="res://bt_texture/down.png" id="9_8hkq1"]
+[ext_resource type="Texture2D" uid="uid://dlhoyi804y4x2" path="res://bt_texture/down_right.png" id="10_44ako"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qb2lh"]
+frequency = 0.05
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vafty"]
+gradient = ExtResource("2_mf8pv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7y5rp"]
+albedo_color = Color(0.0862745, 0.0862745, 0.0901961, 1)
+metallic = 1.0
+metallic_specular = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_kuydm"]
+material = SubResource("StandardMaterial3D_7y5rp")
+size = Vector3(1000, 1, 1000)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tukhd"]
+
+[sub_resource type="Sky" id="Sky_qyncf"]
+sky_material = SubResource("ProceduralSkyMaterial_tukhd")
+
+[sub_resource type="Environment" id="Environment_vivny"]
+background_mode = 1
+background_color = Color(0.27451, 0.270588, 0.258824, 1)
+sky = SubResource("Sky_qyncf")
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_yin37")
+fnoise = SubResource("FastNoiseLite_qb2lh")
+grad = SubResource("GradientTexture1D_vafty")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, 500)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_kuydm")
+skeleton = NodePath("../..")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+sky_mode = 1
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -230.0
+grow_horizontal = 0
+size_flags_horizontal = 10
+
+[node name="Background" type="TextureRect" parent="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1606.0
+grow_horizontal = 2
+texture = ExtResource("3_xo5b6")
+
+[node name="CamAngle" type="HSlider" parent="Control"]
+layout_mode = 2
+offset_left = 13.0
+offset_top = 34.0
+offset_right = 200.0
+offset_bottom = 50.0
+min_value = -90.0
+max_value = -15.0
+value = -15.0
+
+[node name="CamDist" type="HSlider" parent="Control"]
+layout_mode = 2
+offset_left = 13.0
+offset_top = 79.0
+offset_right = 200.0
+offset_bottom = 95.0
+min_value = 300.0
+max_value = 1500.0
+step = 10.0
+value = 800.0
+
+[node name="Lbl_Seed" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 110.0
+offset_right = 112.0
+offset_bottom = 142.0
+text = "Seed :"
+scroll_active = false
+
+[node name="Lbl_CamAngle" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 198.0
+offset_bottom = 39.0
+text = "Camera Angle :"
+scroll_active = false
+
+[node name="Lbl_CamDistance" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 51.0
+offset_right = 198.0
+offset_bottom = 83.0
+text = "Camera Distance :"
+scroll_active = false
+
+[node name="Speed" type="HSlider" parent="Control"]
+layout_mode = 2
+offset_left = 13.0
+offset_top = 627.0
+offset_right = 200.0
+offset_bottom = 643.0
+value = 50.0
+
+[node name="Lbl_Speed" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 599.0
+offset_right = 198.0
+offset_bottom = 631.0
+text = "Speed :"
+scroll_active = false
+
+[node name="Seed" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 127.0
+offset_top = 106.0
+offset_right = 217.0
+offset_bottom = 138.0
+
+[node name="Lbl_Freq" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 13.0
+offset_top = 149.0
+offset_right = 113.0
+offset_bottom = 181.0
+text = "Frequency :"
+scroll_active = false
+
+[node name="Frequency" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 128.0
+offset_top = 147.0
+offset_right = 218.0
+offset_bottom = 179.0
+max_value = 1.0
+step = 0.001
+value = 0.01
+
+[node name="Lbl_Octaves" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 192.0
+offset_right = 112.0
+offset_bottom = 224.0
+text = "Octaves :"
+scroll_active = false
+
+[node name="Octaves" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 127.0
+offset_top = 188.0
+offset_right = 217.0
+offset_bottom = 220.0
+min_value = 1.0
+max_value = 16.0
+value = 5.0
+
+[node name="Lbl_Lacunarity" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 13.0
+offset_top = 232.0
+offset_right = 113.0
+offset_bottom = 264.0
+text = "Lacunarity :"
+scroll_active = false
+
+[node name="Lacunarity" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 128.0
+offset_top = 230.0
+offset_right = 218.0
+offset_bottom = 262.0
+max_value = 2.0
+step = 0.1
+
+[node name="Lbl_Gain" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 12.0
+offset_top = 274.0
+offset_right = 112.0
+offset_bottom = 306.0
+text = "Gain :"
+scroll_active = false
+
+[node name="Gain" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 127.0
+offset_top = 270.0
+offset_right = 217.0
+offset_bottom = 302.0
+max_value = 10.0
+step = 0.1
+page = 1.0
+value = 0.5
+
+[node name="Lbl_Strength" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 13.0
+offset_top = 314.0
+offset_right = 113.0
+offset_bottom = 346.0
+text = "Strength :"
+scroll_active = false
+
+[node name="Lbl_Offset" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+offset_left = 13.0
+offset_top = 355.0
+offset_right = 218.0
+offset_bottom = 387.0
+text = "Offset X,Y"
+scroll_active = false
+
+[node name="Strength" type="SpinBox" parent="Control"]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+offset_left = 128.0
+offset_top = 312.0
+offset_right = 218.0
+offset_bottom = 344.0
+max_value = 1.0
+step = 0.01
+
+[node name="GridContainer" type="GridContainer" parent="Control"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 391.0
+offset_right = 216.0
+offset_bottom = 591.0
+columns = 3
+
+[node name="Bt_UpLeft" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("3_3y6yt")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_Up" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("4_l8exa")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_UpRight" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("5_w7eyl")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_Left" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("6_mt4fl")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_Right" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("7_jheoh")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_DownLeft" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("8_7ach2")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_Down" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("9_8hkq1")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Bt_DownRight" type="TextureButton" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("10_44ako")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="CamAxe" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CamAxe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 800)
+current = true
+size = 2600.38
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vivny")
+
+[connection signal="value_changed" from="Control/CamAngle" to="." method="_on_cam_angle_value_changed"]
+[connection signal="value_changed" from="Control/CamDist" to="." method="_on_cam_dist_value_changed"]
+[connection signal="value_changed" from="Control/Speed" to="." method="_on_speed_value_changed"]
+[connection signal="value_changed" from="Control/Seed" to="." method="_on_seed_value_changed"]
+[connection signal="value_changed" from="Control/Frequency" to="." method="_on_frequency_value_changed"]
+[connection signal="value_changed" from="Control/Octaves" to="." method="_on_octaves_value_changed"]
+[connection signal="value_changed" from="Control/Lacunarity" to="." method="_on_lacunarity_value_changed"]
+[connection signal="value_changed" from="Control/Gain" to="." method="_on_gain_value_changed"]
+[connection signal="value_changed" from="Control/Strength" to="." method="_on_strength_value_changed"]
+[connection signal="button_down" from="Control/GridContainer/Bt_UpLeft" to="." method="_on_bt_up_left_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_UpLeft" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_Up" to="." method="_on_bt_up_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_Up" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_UpRight" to="." method="_on_bt_up_right_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_UpRight" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_Left" to="." method="_on_bt_left_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_Left" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_Right" to="." method="_on_bt_right_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_Right" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_DownLeft" to="." method="_on_bt_down_left_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_DownLeft" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_Down" to="." method="_on_bt_down_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_Down" to="." method="_on_bt_up"]
+[connection signal="button_down" from="Control/GridContainer/Bt_DownRight" to="." method="_on_bt_down_right_button_down"]
+[connection signal="button_up" from="Control/GridContainer/Bt_DownRight" to="." method="_on_bt_up"]
